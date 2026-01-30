@@ -54,6 +54,7 @@ jobs:
           python -m pip install -U pip
           pip install -r requirements.txt || true
           pip install fastapi uvicorn sqlalchemy psycopg2-binary alembic pydantic-settings
+          pip install "pydantic[email]"
           pip install "bcrypt<4.0" "passlib[bcrypt]==1.7.4" "python-jose[cryptography]"
           pip install pytest httpx
          
