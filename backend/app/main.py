@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.news.router import router as news_router
+from app.auth.router import router as auth_router
 
 app = FastAPI(
   title="CRM Backend API — pet project",
@@ -10,3 +11,4 @@ app = FastAPI(
 
 # Подключаем роутер
 app.include_router(news_router)
+app.include_router(auth_router)
