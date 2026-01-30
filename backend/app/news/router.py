@@ -1,7 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
-from app.news import schemas, service
+
 from app.core.db import get_db
+from app.news import schemas, service
+from app.common.rbac import require_roles
 
 router = APIRouter(
 	prefix="/news",
@@ -13,6 +15,7 @@ router = APIRouter(
 	'',
 	response_model=schemas.News,
 	status_code=status.HTTP_201_CREATED,
+	dependencies=[Depends(require_roles("hr","admin"))],
   summary="Create news",
   description="Creates a news item and returns it with generated ID and timestamp.",
 )

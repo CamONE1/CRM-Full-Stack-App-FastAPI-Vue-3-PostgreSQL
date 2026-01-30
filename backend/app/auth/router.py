@@ -14,7 +14,10 @@ from app.auth.security import (
 	JWT_ALG,
 )
 
-router = APIRouter(prefix="/auth", tags=["Auth"])
+router = APIRouter(
+	prefix="/auth",
+	tags=["Auth"]
+)
 bearer = HTTPBearer(auto_error=False)
 
 
@@ -29,7 +32,10 @@ def decode_token(token: str) -> dict:
 		raise HTTPException(status_code=401, detail="Invalid token")
 
 
-@router.post("/login", response_model=TokenPair)
+@router.post(
+	"/login",
+	response_model=TokenPair
+)
 def login(data: LoginRequest, db: Session = Depends(get_db)):
 	user = get_user_by_email(db, data.email)
 	if not user or not verify_password(data.password, user.password_hash):
@@ -43,7 +49,10 @@ def login(data: LoginRequest, db: Session = Depends(get_db)):
 	)
 
 
-@router.post("/refresh", response_model=TokenPair)
+@router.post(
+	"/refresh",
+	response_model=TokenPair
+)
 def refresh(refresh_token: str, db: Session = Depends(get_db)):
 	payload = decode_token(refresh_token)
 	if payload.get("type") != "refresh":
@@ -60,7 +69,10 @@ def refresh(refresh_token: str, db: Session = Depends(get_db)):
 	)
 
 
-@router.get("/me", response_model=MeResponse)
+@router.get(
+	"/me",
+	response_model=MeResponse
+)
 def me(creds: HTTPAuthorizationCredentials | None = Depends(bearer), db: Session = Depends(get_db)):
 	if creds is None:
 		raise HTTPException(status_code=401, detail="Missing Authorization header")
