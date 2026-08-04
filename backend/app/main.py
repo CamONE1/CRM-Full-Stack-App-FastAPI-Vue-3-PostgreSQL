@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.news.router import router as news_router
 from app.auth.router import router as auth_router
+from app.users.router import router as users_router
 
 app = FastAPI(
   title="CRM Backend API — pet project",
@@ -22,3 +23,4 @@ app.add_middleware(
 # Подключаем роутер
 app.include_router(news_router)
 app.include_router(auth_router)
+app.include_router(users_router)
