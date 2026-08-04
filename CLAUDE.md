@@ -1,6 +1,7 @@
 # CLAUDE.md — HR Portal (pet project)
 
 ## What this is
+Detailed page map and stages: see PLAN.md. Idea backlog: IDEAS.md.
 Mini HR portal: role-based internal system (admin / hr / user) with a **job-offer lifecycle module** as the flagship feature. Built solo as a portfolio project; quality bar = production-like. Author: frontend developer (Vue) re-entering hands-on work — explain non-trivial backend decisions briefly when making them.
 
 ## Stack
