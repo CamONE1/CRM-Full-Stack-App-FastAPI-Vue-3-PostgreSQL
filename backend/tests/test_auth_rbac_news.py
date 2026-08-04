@@ -1,3 +1,6 @@
+from app.employees.models import Employee
+
+
 # Проверяем, что /auth/login действительно выдаёт пару токенов
 def test_login_returns_tokens(admin_tokens: dict):
 	assert "access_token" in admin_tokens
@@ -28,7 +31,7 @@ def test_news_create_with_refresh_token_is_401(client, admin_tokens: dict):
 
 
 # Access токен admin должен позволить создать новость → 201
-def test_news_create_with_access_token_is_201(client, admin_tokens: dict):
+def test_news_create_with_access_token_is_201(client, admin_tokens: dict, admin_user, db):
 	access = admin_tokens["access_token"]
 	resp = client.post(
 		"/news",
@@ -43,6 +46,10 @@ def test_news_create_with_access_token_is_201(client, admin_tokens: dict):
 	assert data["title"] == "hello"
 	assert data["body"] == "world"
 	assert "id" in data
+
+	# author_id должен указывать на Employee, привязанного к текущему пользователю
+	author_employee = db.query(Employee).filter(Employee.user_id == admin_user.id).first()
+	assert data["author_id"] == author_employee.id
 
 
 # GET /news публичный (без токена) и использует offset/limit
