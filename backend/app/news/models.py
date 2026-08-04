@@ -1,9 +1,9 @@
+from datetime import datetime
+
 from sqlalchemy import String, Text, DateTime, func
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.db import Base
-
-from datetime import datetime
 
 
 class News(Base):
