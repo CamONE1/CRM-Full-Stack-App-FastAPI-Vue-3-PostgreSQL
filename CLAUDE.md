@@ -27,6 +27,17 @@ backend/tests/ # integration tests, httpx AsyncClient + test DB
 3. **Offers lifecycle:** draft → sent (generates `public_token` uuid) → accepted | declined (candidate action, idempotent) | expired (checked against `expires_at` on read). Public link uses token, never numeric id.
 4. One Pinia store per entity on the frontend; pages read stores, no local data copies.
 
+## Frontend code style (non-negotiable)
+- Component-first: build small, universal, reusable components (BaseButton,
+  BaseTable, BaseModal, StatusBadge, FormField...) and compose pages from them.
+  Before creating a new component, check if an existing one can be reused or
+  slightly extended (props/slots) instead.
+- Simplicity over cleverness: prefer the simplest solution that works; no
+  premature abstractions, no over-engineering. Code must stay easy to read,
+  extend, and scale.
+- Pages = composition + store calls; heavy logic lives in stores/composables,
+  not inside page components.
+
 ## Conventions
 - Code, comments, docstrings, commit messages: **English**. UI strings: Russian.
 - Commits: conventional (`feat:`, `fix:`, `chore:`, `docs:`, `test:`). Small, per-feature.
@@ -35,6 +46,14 @@ backend/tests/ # integration tests, httpx AsyncClient + test DB
 - Secrets in `.env` (gitignored). Anthropic API key (stage 5) lives backend-side only.
 - Record notable design choices in README "Architecture Decisions" section, one line each.
 - New feature ideas go to `IDEAS.md`, not into the current stage.
+- Branching: one branch per stage, classic format `type/short-name`
+  (feature/, fix/, docs/, chore/ — e.g. feature/frontend-skeleton).
+  Create the branch BEFORE starting any stage work; never commit to main directly.
+- Commit small and often: one logical change = one commit (added a doc — commit;
+  created a script — commit; finished a component — commit). Do not batch
+  unrelated changes into one commit.
+- Git boundaries: Claude commits locally only. Pull, merge, and push are done
+  by the author personally — never run `git push`, `git pull`, or `git merge`.
 
 ## Roadmap (work stage by stage; don't jump ahead)
 - **Stage 0 (current):** CORS for Vite (localhost:5173); `employees` table + migration + seeds (3 role users, 5–6 employees, incl. 1–2 without user accounts); protect news endpoints with roles + add `author_id`; `GET /users` + `PATCH /users/{id}` (admin).
