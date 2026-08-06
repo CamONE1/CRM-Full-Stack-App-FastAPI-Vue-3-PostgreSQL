@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import * as authApi from '@/api/auth'
-import { clearTokens, getAccessToken, setTokens } from '@/api/tokenStorage'
+import { refreshAccessToken } from '@/api/http'
+import { clearTokens, getAccessToken, getRefreshToken, setTokens } from '@/api/tokenStorage'
 import type { AuthUser } from '@/types/auth'
 
 export const useAuthStore = defineStore('auth', () => {
@@ -24,6 +25,15 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function restoreSession(): Promise<void> {
+    if (!getAccessToken() && getRefreshToken()) {
+      const newAccessToken = await refreshAccessToken().catch(() => null)
+      if (!newAccessToken) {
+        clearTokens()
+        isReady.value = true
+        return
+      }
+    }
+
     if (getAccessToken()) {
       try {
         user.value = await authApi.fetchMe()

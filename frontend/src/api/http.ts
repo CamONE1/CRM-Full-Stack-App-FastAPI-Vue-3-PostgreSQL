@@ -19,7 +19,7 @@ interface RetriableConfig extends InternalAxiosRequestConfig {
 }
 
 // Backend expects refresh_token as a query param (not JSON body) — see auth/router.py
-async function refreshAccessToken(): Promise<string | null> {
+export async function refreshAccessToken(): Promise<string | null> {
   const refreshToken = getRefreshToken()
   if (!refreshToken) return null
 
