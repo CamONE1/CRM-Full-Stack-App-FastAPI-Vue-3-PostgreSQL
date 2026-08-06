@@ -25,6 +25,7 @@ class Employee(Base):
 	full_name: Mapped[str] = mapped_column(String(255), nullable=False)
 	email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
 	phone: Mapped[str | None] = mapped_column(String(50), nullable=True)
+	telegram: Mapped[str | None] = mapped_column(String(100), nullable=True)
 	department: Mapped[str | None] = mapped_column(String(100), nullable=True)
 	position: Mapped[str | None] = mapped_column(String(150), nullable=True)
 	hire_date: Mapped[date | None] = mapped_column(Date, nullable=True)
