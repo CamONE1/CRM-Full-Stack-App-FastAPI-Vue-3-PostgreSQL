@@ -88,12 +88,29 @@ function goToEmployee(row: Employee): void {
   router.push({ name: 'employee-detail', params: { id: row.id } })
 }
 
+function csvFilename(): string {
+  const date = new Date().toISOString().slice(0, 10)
+  const parts = ['employees', date]
+  if (status.value === 'true') parts.push('active')
+  else if (status.value === 'false') parts.push('inactive')
+  if (position.value) parts.push(slugify(position.value))
+  return `${parts.join('_')}.csv`
+}
+
+function slugify(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
 async function exportCsv(): Promise<void> {
   isExporting.value = true
   try {
     const { items } = await employeesApi.fetchEmployees({ ...currentParams(), offset: 0, limit: 1000 })
     downloadCsv(
-      'employees.csv',
+      csvFilename(),
       ['ФИО', 'Email', 'Должность', 'Отдел', 'Телефон', 'Telegram', 'Статус', 'Дата найма'],
       items.map((e) => [
         e.full_name,
