@@ -122,3 +122,6 @@ Stage-by-stage plan (current stage, architecture principles, conventions) is tra
 
 - `employees` is the single source of truth for a person's profile; `users` stays auth-only (email/password/role). The link is `employees.user_id`, a nullable unique FK — an employee may exist without ever getting a login.
 - CORS is restricted to `http://localhost:5173` (Vite dev server) with credentials allowed, since the frontend sends the JWT via `Authorization` header and will later need cookies-free credentialed requests.
+- Frontend keeps tokens in `localStorage` (not cookies) and attaches them via an `Authorization` header, matching the backend's bearer-only auth; the axios response interceptor retries once after a silent `/auth/refresh` on a 401, queuing any requests that 401 while a refresh is already in flight.
+- Route guards read role from the JWT-derived `AuthUser` in the Pinia auth store, not from a separate call; unknown/insufficient roles land on `/403` rather than a silent redirect to `/login`, so the distinction between "not logged in" and "logged in but not allowed" stays visible to the user.
+- Stage-2/3 pages are stubbed via a single `PlaceholderView` component driven by route `props`, so the full nav/route structure from `PLAN.md` exists from stage 1 without building throwaway per-page files ahead of schedule.

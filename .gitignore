@@ -23,6 +23,7 @@ cypress/screenshots/
 .env.*
 env.*
 *.local
+!.env.example
 
 # Python
 __pycache__/
