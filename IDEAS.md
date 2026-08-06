@@ -11,7 +11,8 @@ Rules: new ideas land here, NOT in the current stage. Review after the minimal s
 - **Calendar module:** company events + employee birthdays/anniversaries, matched with news (I rebuilt a calendar like this at my previous company).
 - **Events module:** matched with news + calendar (was in my old backlog at work).
 - **Audit log ("change history"):** who changed what and when, admin-only page. Table `audit_log`, write on every mutation.
-- **CSV export** on employees and offers tables.
+- **CSV export** on the offers table (done for employees in stage 2).
+- **Cascading department → position filter** on the employees table (needs a migration for a `department` reference, seed data, and a `/employees/positions?department=` endpoint).
 - **Auto-refresh toggle** on tables ("update every N minutes") — pattern from my previous company's system.
 - **Notifications:** in-app bell + optional Telegram push on offer status change (reuse my TG-bot experience).
 - **AI summary endpoint:** condensed version of long news items for the feed.
@@ -22,3 +23,7 @@ Rules: new ideas land here, NOT in the current stage. Review after the minimal s
 - Fix Pydantic deprecation warning in `app/core/config.py` (class-based `config` → `ConfigDict`).
 - Translate remaining Russian code comments to English (seed script, main.py CORS comment).
 - Add `Architecture Decisions` section to README and backfill decisions made so far (users vs employees split, token in public offer links, SET NULL on user deletion).
+- **BaseIcon component:** props → CSS-variables pattern (`width`, `fill`, `fillHover`, `rotate`), for future status/sort icons.
+- **Form validation via vuelidate:** login, `/profile`, and future offer-module forms, with a single shared error-message style under each field.
+- **Placeholder text audit:** one consistent style/tone for placeholders across all form fields.
+- **`/ui-kit` page:** a mini-Storybook listing all `components/base/*` with their prop variants, for visual regression checks during development.

@@ -30,15 +30,13 @@ async function handleSubmit(): Promise<void> {
 </script>
 
 <template>
-  <div class="flex min-h-svh items-center justify-center bg-gray-50 px-4">
-    <div class="w-full max-w-sm rounded-lg bg-white p-8 shadow">
-      <h1 class="mb-6 text-xl font-semibold text-gray-900">Вход в HR-портал</h1>
-      <form class="space-y-4" @submit.prevent="handleSubmit">
-        <FormField v-model="email" label="Email" type="email" />
-        <FormField v-model="password" label="Пароль" type="password" />
-        <p v-if="errorMessage" class="text-sm text-red-600">{{ errorMessage }}</p>
-        <BaseButton type="submit" class="w-full" :loading="isSubmitting">Войти</BaseButton>
-      </form>
-    </div>
+  <div class="w-full max-w-sm rounded-lg bg-white p-8 shadow">
+    <h1 class="mb-6 text-xl font-semibold text-gray-900">Вход в HR-портал</h1>
+    <form class="space-y-4" @submit.prevent="handleSubmit">
+      <FormField v-model="email" label="Email" type="email" />
+      <FormField v-model="password" label="Пароль" type="password" />
+      <p v-if="errorMessage" class="text-sm text-red-600">{{ errorMessage }}</p>
+      <BaseButton type="submit" class="w-full" :loading="isSubmitting">Войти</BaseButton>
+    </form>
   </div>
 </template>

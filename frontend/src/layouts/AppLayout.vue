@@ -22,7 +22,7 @@ function handleLogout(): void {
         <BaseButton variant="secondary" @click="handleLogout">Выйти</BaseButton>
       </header>
       <main class="flex-1 p-6">
-        <RouterView />
+        <slot />
       </main>
     </div>
   </div>
