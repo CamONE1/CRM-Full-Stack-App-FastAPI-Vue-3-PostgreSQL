@@ -3,6 +3,7 @@ import { onMounted, ref, watch } from 'vue'
 import { useEmployeesStore } from '@/stores/employees'
 import BaseButton from '@/components/base/BaseButton.vue'
 import FormField from '@/components/base/FormField.vue'
+import PageHeader from '@/components/base/PageHeader.vue'
 import StatusBadge from '@/components/base/StatusBadge.vue'
 
 const store = useEmployeesStore()
@@ -43,7 +44,7 @@ watch(() => store.myProfile, resetForm)
 
 <template>
   <div class="max-w-xl space-y-4">
-    <h1 class="text-lg font-semibold text-gray-900">Мой профиль</h1>
+    <PageHeader title="Мой профиль" />
 
     <div v-if="store.myProfile" class="rounded-lg border border-gray-200 bg-white p-6">
       <div class="flex items-start justify-between">
