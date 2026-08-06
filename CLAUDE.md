@@ -54,6 +54,18 @@ backend/tests/ # integration tests, httpx AsyncClient + test DB
   unrelated changes into one commit.
 - Git boundaries: Claude commits locally only. Pull, merge, and push are done
   by the author personally — never run `git push`, `git pull`, or `git merge`.
+- Versioning (semver, one bump per stage: 0.X.0):
+  - Single sources of truth, must always match: `frontend/package.json` "version"
+    and `APP_VERSION` in `backend/app/core/config.py` (passed to FastAPI(version=...)).
+    Everything else (UI footer, /docs, logs) must READ these — never hardcode copies.
+  - Bump BOTH in the final commit of a stage: `chore: bump version to X.Y.Z`.
+  - PROACTIVE GUARD: whenever the author mentions merging, opening a PR, closing
+    or finishing a stage — CHECK both versions first. If they haven't been bumped
+    this stage or don't match each other, say so and offer the bump before anything else.
+  - Git tags and GitHub Releases are created by the author after merge, not Claude.
+  - v1.0.0 is reserved for the first deployed version (stage 6).
+- Docs-only changes (CLAUDE.md, IDEAS.md, PLAN.md, README typos) may be committed straight
+  to main; all code goes through stage branches and PRs.
 
 ## Roadmap (work stage by stage; don't jump ahead)
 - **Stage 0 (current):** CORS for Vite (localhost:5173); `employees` table + migration + seeds (3 role users, 5–6 employees, incl. 1–2 without user accounts); protect news endpoints with roles + add `author_id`; `GET /users` + `PATCH /users/{id}` (admin).
