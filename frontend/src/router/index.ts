@@ -44,19 +44,17 @@ const router = createRouter({
           props: { title: 'Управление новостями' },
           meta: { roles: HR_ADMIN },
         },
-        { path: 'profile', name: 'profile', component: PlaceholderView, props: { title: 'Мой профиль' } },
+        { path: 'profile', name: 'profile', component: () => import('@/views/ProfileView.vue') },
         {
           path: 'employees',
           name: 'employees',
-          component: PlaceholderView,
-          props: { title: 'Сотрудники' },
+          component: () => import('@/views/EmployeesView.vue'),
           meta: { roles: HR_ADMIN },
         },
         {
           path: 'employees/:id',
           name: 'employee-detail',
-          component: PlaceholderView,
-          props: { title: 'Карточка сотрудника' },
+          component: () => import('@/views/EmployeeDetailView.vue'),
           meta: { roles: HR_ADMIN },
         },
         {
