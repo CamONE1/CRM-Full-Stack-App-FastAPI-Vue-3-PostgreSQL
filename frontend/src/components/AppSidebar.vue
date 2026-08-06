@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import type { UserRole } from '@/types/auth'
+import { version as appVersion } from '../../package.json'
 
 interface NavItem {
   to: string
@@ -63,5 +64,6 @@ const visibleSections = computed(() =>
         {{ item.label }}
       </RouterLink>
     </div>
+    <div class="mt-auto px-2 text-xs text-gray-400">v{{ appVersion }}</div>
   </nav>
 </template>
