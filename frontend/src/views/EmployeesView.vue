@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useEmployeesStore } from '@/stores/employees'
 import * as employeesApi from '@/api/employees'
 import { downloadCsv } from '@/utils/csv'
@@ -31,6 +31,7 @@ const COLUMNS = [
 ]
 
 const store = useEmployeesStore()
+const route = useRoute()
 const router = useRouter()
 
 const search = ref('')
@@ -45,6 +46,24 @@ const positionOptions = computed<SelectOption[]>(() => [
 ])
 
 let searchDebounceHandle: ReturnType<typeof setTimeout> | undefined
+
+function readFromQuery(): void {
+  search.value = typeof route.query.search === 'string' ? route.query.search : ''
+  position.value = typeof route.query.position === 'string' ? route.query.position : ''
+  status.value = typeof route.query.status === 'string' ? route.query.status : ''
+  page.value = Number(route.query.page ?? 0) || 0
+}
+
+function writeToQuery(): void {
+  router.replace({
+    query: {
+      search: search.value || undefined,
+      position: position.value || undefined,
+      status: status.value || undefined,
+      page: page.value > 0 ? String(page.value) : undefined,
+    },
+  })
+}
 
 function currentParams() {
   return {
@@ -62,6 +81,7 @@ async function loadEmployees(): Promise<void> {
 
 function goToPage(next: number): void {
   page.value = next
+  writeToQuery()
 }
 
 function goToEmployee(row: Employee): void {
@@ -93,23 +113,28 @@ async function exportCsv(): Promise<void> {
 
 watch([position, status], () => {
   page.value = 0
-  loadEmployees()
+  writeToQuery()
 })
 
 watch(search, () => {
   clearTimeout(searchDebounceHandle)
   searchDebounceHandle = setTimeout(() => {
     page.value = 0
-    loadEmployees()
+    writeToQuery()
   }, 300)
 })
 
-watch(page, () => {
-  loadEmployees()
-})
+watch(
+  () => route.query,
+  () => {
+    readFromQuery()
+    loadEmployees()
+  },
+)
 
 onMounted(() => {
   store.fetchPositions()
+  readFromQuery()
   loadEmployees()
 })
 </script>
