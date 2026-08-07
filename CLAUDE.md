@@ -37,13 +37,13 @@ backend/tests/ # integration tests, httpx AsyncClient + test DB
 ### Starting a stage
 1. Read CLAUDE.md and the stage section in PLAN.md.
 2. NO CODE YET. First present a work plan as a task list:
-  - [ ] step 1: what is done, which files are created/changed
-  - [ ] step 2: ...
+  - Step 1: what is done, which files are created/changed
+  - Step 2: ...
   Plus: decisions that need the author's choice (options with trade-offs), and an explicit "out of scope" list (IDEAS.md candidates).
 3. Wait for the author's explicit approval ("план утверждаю"). Only then create the stage branch (see Branching in Conventions).
 
 ### During a stage
-4. Keep the task list up to date (done / in progress / open) and show it in every report.
+4. Keep the task list up to date (done / in progress / open) and show it in every report. Mirror it in the native task tracker (`TaskCreate`/`TaskUpdate`), not just the markdown checklist.
 5. After each step: a short report — "step N done: what was done, how to verify it by hand" — then WAIT for the author's go-ahead before the next step.
 6. A plan step may produce several commits; commit rules live in Conventions (one logical change = one commit, conventional types).
 7. Ideas beyond the stage scope: do not implement — propose one line for IDEAS.md and move on.
