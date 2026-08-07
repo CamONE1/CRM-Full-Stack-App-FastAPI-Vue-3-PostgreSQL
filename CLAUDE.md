@@ -5,9 +5,10 @@ Detailed page map and stages: see PLAN.md. Idea backlog: IDEAS.md.
 Mini HR portal: role-based internal system (admin / hr / user) with a **job-offer lifecycle module** as the flagship feature. Built solo as a portfolio project; quality bar = production-like. Author: frontend developer (Vue) re-entering hands-on work — explain non-trivial backend decisions briefly when making them.
 
 ## Stack
-- **Backend:** FastAPI, SQLAlchemy 2.0 (typed `Mapped[]` style), PostgreSQL, Alembic, JWT auth (access+refresh), pytest, GitHub Actions CI (`.github/workflows/backend-ci.yml`)
+- **Backend:** FastAPI, SQLAlchemy 2.0 (typed `Mapped[]` style), PostgreSQL, Alembic, JWT auth (access+refresh), pytest
 - **Frontend (to be created in `frontend/`):** Vue 3 `<script setup>` + TypeScript, Vite, Pinia, Vue Router, Tailwind CSS, axios
 - Docker Compose for local PostgreSQL
+- GitHub Actions CI: backend tests (`.github/workflows/backend-ci.yml`), frontend typecheck + build (`.github/workflows/frontend-ci.yml`)
 
 ## Structure
 ```
