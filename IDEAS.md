@@ -27,3 +27,5 @@ Rules: new ideas land here, NOT in the current stage. Review after the minimal s
 - **Form validation via vuelidate:** login, `/profile`, and future offer-module forms, with a single shared error-message style under each field.
 - **Placeholder text audit:** one consistent style/tone for placeholders across all form fields.
 - **`/ui-kit` page:** a mini-Storybook listing all `components/base/*` with their prop variants, for visual regression checks during development.
+- **Frontend tests in CI:** add a test step to `frontend-ci.yml` once unit/e2e tests exist.
+- **`dorny/paths-filter` for CI:** if backend and frontend workflows ever merge into one file, use it for per-job path filtering.
