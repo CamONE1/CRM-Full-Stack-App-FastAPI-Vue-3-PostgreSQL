@@ -58,8 +58,7 @@ const router = createRouter({
     {
       path: '/offers',
       name: 'offers',
-      component: PlaceholderView,
-      props: { title: 'Офферы' },
+      component: () => import('@/views/OffersView.vue'),
       meta: { roles: HR_ADMIN },
     },
     {
