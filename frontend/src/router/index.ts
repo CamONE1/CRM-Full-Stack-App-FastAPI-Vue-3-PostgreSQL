@@ -31,6 +31,12 @@ const router = createRouter({
       component: () => import('@/views/ForbiddenView.vue'),
       meta: { public: true, layout: 'blank' },
     },
+    {
+      path: '/offer/:token',
+      name: 'offer-public',
+      component: () => import('@/views/OfferPublicView.vue'),
+      meta: { public: true, layout: 'blank' },
+    },
     { path: '/', redirect: { name: 'dashboard' } },
     { path: '/dashboard', name: 'dashboard', component: PlaceholderView, props: { title: 'Дашборд' } },
     { path: '/news', name: 'news', component: PlaceholderView, props: { title: 'Новости' } },

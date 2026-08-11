@@ -54,6 +54,10 @@ export const useOffersStore = defineStore('offers', () => {
     publicOffer.value = await offersApi.fetchPublicOffer(token)
   }
 
+  function clearPublic(): void {
+    publicOffer.value = null
+  }
+
   async function respondPublic(token: string, action: OfferRespondAction): Promise<void> {
     publicOffer.value = await offersApi.respondToPublicOffer(token, action)
   }
@@ -73,6 +77,7 @@ export const useOffersStore = defineStore('offers', () => {
     send,
     archive,
     fetchPublic,
+    clearPublic,
     respondPublic,
   }
 })
