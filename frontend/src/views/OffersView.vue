@@ -12,38 +12,19 @@ import StatusBadge from '@/components/base/StatusBadge.vue'
 import type { SelectOption } from '@/components/base/BaseSelect.vue'
 import type { Offer, OfferStatus } from '@/types/offer'
 import { publicOfferLink } from '@/utils/offerLink'
+import { OFFER_STATUS_LABELS, OFFER_STATUS_VARIANTS } from '@/utils/offerStatus'
 
 const PAGE_SIZE = 20
 
 const STATUS_OPTIONS: SelectOption[] = [
   { value: '', label: 'Любой статус' },
-  { value: 'draft', label: 'Черновик' },
-  { value: 'sent', label: 'Отправлен' },
-  { value: 'accepted', label: 'Принят' },
-  { value: 'declined', label: 'Отклонён' },
-  { value: 'expired', label: 'Истёк' },
+  ...Object.entries(OFFER_STATUS_LABELS).map(([value, label]) => ({ value, label })),
 ]
 
 const ARCHIVED_OPTIONS: SelectOption[] = [
   { value: '', label: 'Без архивных' },
   { value: 'true', label: 'Показать архивные' },
 ]
-
-const STATUS_LABELS: Record<OfferStatus, string> = {
-  draft: 'Черновик',
-  sent: 'Отправлен',
-  accepted: 'Принят',
-  declined: 'Отклонён',
-  expired: 'Истёк',
-}
-
-const STATUS_VARIANTS: Record<OfferStatus, 'green' | 'red' | 'gray' | 'blue' | 'orange'> = {
-  draft: 'gray',
-  sent: 'blue',
-  accepted: 'green',
-  declined: 'red',
-  expired: 'orange',
-}
 
 const COLUMNS = [
   { key: 'candidate_name', label: 'Кандидат' },
@@ -191,8 +172,8 @@ onMounted(() => {
 
     <BaseTable :columns="COLUMNS" :rows="store.items" :loading="store.isLoading">
       <template #cell-status="{ row }">
-        <StatusBadge :variant="STATUS_VARIANTS[row.status as OfferStatus]">
-          {{ STATUS_LABELS[row.status as OfferStatus] }}
+        <StatusBadge :variant="OFFER_STATUS_VARIANTS[row.status as OfferStatus]">
+          {{ OFFER_STATUS_LABELS[row.status as OfferStatus] }}
         </StatusBadge>
       </template>
 
