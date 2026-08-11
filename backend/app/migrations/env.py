@@ -12,6 +12,7 @@ from app.core.db import Base
 from app.news.models import News
 from app.users.models import User
 from app.employees.models import Employee
+from app.offers.models import Offer
 
 
 # this is the Alembic Config object, which provides
