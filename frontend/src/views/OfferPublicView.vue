@@ -87,9 +87,13 @@ onMounted(loadOffer)
         {{ store.publicOffer.salary_note }}
       </p>
 
+      <!-- Shown regardless of the final status below: a rejected respond (409)
+           still resyncs to the real status, which may no longer be 'sent' —
+           the error must stay visible even after that resync. -->
+      <p v-if="actionError" class="mt-4 text-sm text-red-600">{{ actionError }}</p>
+
       <div v-if="store.publicOffer.status === 'sent'" class="mt-6 space-y-4">
         <p class="text-xs text-gray-400">Оффер действителен до {{ formatDate(store.publicOffer.expires_at) }}</p>
-        <p v-if="actionError" class="text-sm text-red-600">{{ actionError }}</p>
         <div class="flex items-center gap-3">
           <BaseButton :loading="isResponding" @click="respond('accept')">Принять</BaseButton>
           <BaseButton variant="secondary" :loading="isResponding" @click="respond('decline')">Отклонить</BaseButton>
