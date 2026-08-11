@@ -64,8 +64,7 @@ const router = createRouter({
     {
       path: '/offers/new',
       name: 'offers-new',
-      component: PlaceholderView,
-      props: { title: 'Новый оффер' },
+      component: () => import('@/views/OfferFormView.vue'),
       meta: { roles: HR_ADMIN },
     },
     {

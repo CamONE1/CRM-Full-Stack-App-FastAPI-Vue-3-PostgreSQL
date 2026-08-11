@@ -11,6 +11,7 @@ import PageHeader from '@/components/base/PageHeader.vue'
 import StatusBadge from '@/components/base/StatusBadge.vue'
 import type { SelectOption } from '@/components/base/BaseSelect.vue'
 import type { Offer, OfferStatus } from '@/types/offer'
+import { publicOfferLink } from '@/utils/offerLink'
 
 const PAGE_SIZE = 20
 
@@ -122,13 +123,9 @@ function goToNewOffer(): void {
   router.push({ name: 'offers-new' })
 }
 
-function publicLink(offer: Offer): string {
-  return `${window.location.origin}/offer/${offer.public_token}`
-}
-
 async function copyLink(offer: Offer): Promise<void> {
   if (!offer.public_token) return
-  await navigator.clipboard.writeText(publicLink(offer))
+  await navigator.clipboard.writeText(publicOfferLink(offer.public_token))
   copiedOfferId.value = offer.id
   setTimeout(() => {
     if (copiedOfferId.value === offer.id) copiedOfferId.value = null
