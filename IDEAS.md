@@ -18,6 +18,7 @@ Rules: new ideas land here, NOT in the current stage. Review after the minimal s
 - **AI summary endpoint:** condensed version of long news items for the feed.
 - **Dark theme** (if not done in stage 6).
 - **Offer templates:** predefined position templates to speed up offer creation.
+- **GSAP animations on the public offer page:** motion/micro-interactions for the candidate-facing `/offer/{token}` page — brand moment, not needed for MVP.
 
 ## Tech debt
 - Fix Pydantic deprecation warning in `app/core/config.py` (class-based `config` → `ConfigDict`).
@@ -25,7 +26,10 @@ Rules: new ideas land here, NOT in the current stage. Review after the minimal s
 - Add `Architecture Decisions` section to README and backfill decisions made so far (users vs employees split, token in public offer links, SET NULL on user deletion).
 - **BaseIcon component:** props → CSS-variables pattern (`width`, `fill`, `fillHover`, `rotate`), for future status/sort icons.
 - **Form validation via vuelidate:** login, `/profile`, and future offer-module forms, with a single shared error-message style under each field.
-- **Placeholder text audit:** one consistent style/tone for placeholders across all form fields.
+- **Placeholder text + required-field markers:** meaningful placeholder text on every form input across ALL pages (login, profile, employees, offers, news), plus mark required fields with `*` next to the label — currently ad hoc/missing in places.
 - **`/ui-kit` page:** a mini-Storybook listing all `components/base/*` with their prop variants, for visual regression checks during development.
 - **Frontend tests in CI:** add a test step to `frontend-ci.yml` once unit/e2e tests exist.
 - **`dorny/paths-filter` for CI:** if backend and frontend workflows ever merge into one file, use it for per-job path filtering.
+- **Offer editing beyond draft:** allow editing offer fields any time before `accepted` or `expired` (not just while `draft`) — requires reworking the `send_offer`/`update_offer_draft` status gate in `backend/app/offers/service.py`. Changes the offer-creation flow (stage 3).
+- **Offer preview available at any status:** the create-form's candidate-view preview should be reachable from the `/offers` table for already-sent/accepted/declined/expired offers too, not only during the draft-creation wizard.
+- **Retention policy for archived offers:** auto-cleanup by storage duration (uses `archived_at`); tie into the employee offboarding flow.

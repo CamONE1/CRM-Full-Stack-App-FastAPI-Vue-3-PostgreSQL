@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useEmployeesStore } from '@/stores/employees'
 import * as employeesApi from '@/api/employees'
@@ -46,12 +46,19 @@ const positionOptions = computed<SelectOption[]>(() => [
 ])
 
 let searchDebounceHandle: ReturnType<typeof setTimeout> | undefined
+// Guards the page-reset watchers below while readFromQuery() assigns filter
+// refs from the URL — that assignment must not be mistaken for a user-driven
+// filter change that should reset pagination.
+let isSyncingFromQuery = false
 
-function readFromQuery(): void {
+async function readFromQuery(): Promise<void> {
+  isSyncingFromQuery = true
   search.value = typeof route.query.search === 'string' ? route.query.search : ''
   position.value = typeof route.query.position === 'string' ? route.query.position : ''
   status.value = typeof route.query.status === 'string' ? route.query.status : ''
   page.value = Number(route.query.page ?? 0) || 0
+  await nextTick()
+  isSyncingFromQuery = false
 }
 
 function writeToQuery(): void {
@@ -129,11 +136,13 @@ async function exportCsv(): Promise<void> {
 }
 
 watch([position, status], () => {
+  if (isSyncingFromQuery) return
   page.value = 0
   writeToQuery()
 })
 
 watch(search, () => {
+  if (isSyncingFromQuery) return
   clearTimeout(searchDebounceHandle)
   searchDebounceHandle = setTimeout(() => {
     page.value = 0

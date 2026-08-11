@@ -58,15 +58,13 @@ const router = createRouter({
     {
       path: '/offers',
       name: 'offers',
-      component: PlaceholderView,
-      props: { title: 'Офферы' },
+      component: () => import('@/views/OffersView.vue'),
       meta: { roles: HR_ADMIN },
     },
     {
       path: '/offers/new',
       name: 'offers-new',
-      component: PlaceholderView,
-      props: { title: 'Новый оффер' },
+      component: () => import('@/views/OfferFormView.vue'),
       meta: { roles: HR_ADMIN },
     },
     {
