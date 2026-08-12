@@ -5,7 +5,8 @@ Rules: new ideas land here, NOT in the current stage. Review after the minimal s
 ## Next up (strong candidates after MVP)
 - **Offboarding flow:** deactivate employee (`employees.is_active=False`) + revoke login (`users.is_active=False` or unlink), "Inactive" filter tab on the employees table. Employee record is never deleted — history stays.
 - **Candidate questionnaire:** self-service form on the public offer page after acceptance, data flows back into the employee profile (mirrors the real-world flow I built at my last job).
-- **Hiring funnel dashboard widget:** offers by status over time (sent → accepted / declined / expired), conversion rate.
+- **Hiring funnel trend over time:** stage 4 shipped a point-in-time snapshot (`GET /stats`); still open — a weekly/monthly trend of offers by status plus a conversion-rate metric.
+- **HR leaderboard:** number of offers created/accepted per HR employee, dashboard widget or standalone page.
 
 ## Someday / maybe
 - **Calendar module:** company events + employee birthdays/anniversaries, matched with news (I rebuilt a calendar like this at my previous company).
@@ -16,7 +17,9 @@ Rules: new ideas land here, NOT in the current stage. Review after the minimal s
 - **Auto-refresh toggle** on tables ("update every N minutes") — pattern from my previous company's system.
 - **Notifications:** in-app bell + optional Telegram push on offer status change (reuse my TG-bot experience).
 - **AI summary endpoint:** condensed version of long news items for the feed.
-- **Dark theme** (if not done in stage 6).
+- **Dark theme** (if not done in stage 6) — note: ApexCharts (dashboard charts, stage 4) themes via explicit `options` props, not CSS variables, so this needs a small wrapper to re-theme on toggle.
+- **Dashboard date-range filter:** scope `/stats` to a period instead of always "current snapshot".
+- **Dashboard export:** PDF/report snapshot of the dashboard.
 - **Offer templates:** predefined position templates to speed up offer creation.
 - **GSAP animations on the public offer page:** motion/micro-interactions for the candidate-facing `/offer/{token}` page — brand moment, not needed for MVP.
 
@@ -33,3 +36,5 @@ Rules: new ideas land here, NOT in the current stage. Review after the minimal s
 - **Offer editing beyond draft:** allow editing offer fields any time before `accepted` or `expired` (not just while `draft`) — requires reworking the `send_offer`/`update_offer_draft` status gate in `backend/app/offers/service.py`. Changes the offer-creation flow (stage 3).
 - **Offer preview available at any status:** the create-form's candidate-view preview should be reachable from the `/offers` table for already-sent/accepted/declined/expired offers too, not only during the draft-creation wizard.
 - **Retention policy for archived offers:** auto-cleanup by storage duration (uses `archived_at`); tie into the employee offboarding flow.
+- **Eager expiry resolution:** a scheduled job (cron) to flip due `sent` offers to `expired`, instead of relying only on lazy resolution on read (`offers/service.py`, and the bulk resolve added for `GET /stats`).
+- **Configurable recent-widget size:** dashboard's "recent offers"/"recent news" limit is hardcoded to 5.
