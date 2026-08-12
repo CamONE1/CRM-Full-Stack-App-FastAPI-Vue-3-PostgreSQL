@@ -6,6 +6,7 @@ from app.auth.router import router as auth_router
 from app.users.router import router as users_router
 from app.employees.router import router as employees_router
 from app.offers.router import router as offers_router, public_router as offers_public_router
+from app.stats.router import router as stats_router
 
 app = FastAPI(
   title="CRM Backend API — pet project",
@@ -30,3 +31,4 @@ app.include_router(users_router)
 app.include_router(employees_router)
 app.include_router(offers_router)
 app.include_router(offers_public_router)
+app.include_router(stats_router)

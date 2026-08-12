@@ -38,7 +38,7 @@ const router = createRouter({
       meta: { public: true, layout: 'blank' },
     },
     { path: '/', redirect: { name: 'dashboard' } },
-    { path: '/dashboard', name: 'dashboard', component: PlaceholderView, props: { title: 'Дашборд' } },
+    { path: '/dashboard', name: 'dashboard', component: () => import('@/views/DashboardView.vue') },
     { path: '/news', name: 'news', component: PlaceholderView, props: { title: 'Новости' } },
     { path: '/news/:id', name: 'news-detail', component: PlaceholderView, props: { title: 'Новость' } },
     {

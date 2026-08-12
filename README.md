@@ -4,7 +4,7 @@ Mini HR portal with role-based access (admin / hr / user). The flagship feature 
 
 Built solo as a portfolio project; the codebase is written to a production-like quality bar. Detailed architecture rules, conventions and the stage-by-stage roadmap live in [`CLAUDE.md`](./CLAUDE.md).
 
-**Progress:** Stages 0–3 done (backend foundation, frontend skeleton, employees module, offers module). Dashboard (Stage 4) is next.
+**Progress:** Stages 0–4 done (backend foundation, frontend skeleton, employees module, offers module, dashboard). AI assist (Stage 5) is next.
 
 ## Features
 
@@ -22,6 +22,10 @@ Built solo as a portfolio project; the codebase is written to a production-like 
 
 - **News feed** — list (any role) + creation (hr/admin), authored by the linked employee record.
 - **User management** (admin) — list users, change role and active status.
+- **Dashboard** — role-aware: hr/admin see stat tiles, an offers-by-status funnel chart, an employees-by-department chart, and recent-offers/recent-news widgets, all from a single `GET /stats` aggregate; `user` sees a profile summary and the recent-news feed only. Every widget has an explicit empty state for a fresh database.
+
+  <!-- <img src="docs/screenshots/dashboard-hr.png" alt="HR/Admin dashboard — stat tiles, offers funnel and employees-by-department charts, recent widgets" width="800">
+  <img src="docs/screenshots/dashboard-user.png" alt="User dashboard — profile summary and recent news" width="800"> -->
 
 ## Tech stack
 
@@ -35,7 +39,8 @@ Built solo as a portfolio project; the codebase is written to a production-like 
 
 **Frontend**
 - Vue 3 `<script setup>` + TypeScript, Vite, Pinia, Vue Router, Tailwind CSS, axios
-- A small base-component layer (`BaseTable`, `BaseInput`, `BaseSelect`, `BasePagination`, `StatusBadge`, `PageHeader`, ...) that pages compose — no domain logic inside the components themselves.
+- ApexCharts (`vue3-apexcharts`) for the dashboard's two charts
+- A small base-component layer (`BaseTable`, `BaseInput`, `BaseSelect`, `BasePagination`, `StatusBadge`, `PageHeader`, `EmptyState`, `StatTile`, ...) that pages compose — no domain logic inside the components themselves.
 
 **Infra**
 - Docker Compose for local PostgreSQL
@@ -168,3 +173,6 @@ Stage-by-stage plan (current stage, architecture principles, conventions) is tra
 - Offer expiry (`sent → expired`) is checked lazily on read, not via a scheduled job: whenever anyone (HR or the candidate) actually looks at the offer, its status is corrected in the DB before being returned. Trade-off: an expired-but-unopened offer can sit as `sent` indefinitely — acceptable here, since nothing depends on real-time expiry notification.
 - Archiving an offer (`is_archived` + `archived_at`) is a visibility flag independent of the lifecycle status, not a status value itself — an offer can be archived at any point in its lifecycle without disturbing the state machine. `archived_at` is stored now (unused beyond display) as groundwork for a future retention policy.
 - The public `/offer/{token}` page treats any load failure — unknown token (404), malformed token (422), or a network error — as the same generic "offer not found" state; a public, unauthenticated page should never leak which failure mode occurred.
+- The dashboard is a single `GET /stats` endpoint (hr/admin only), not one endpoint per widget: it's one page built for one read, and both aggregates (offers-by-status, employees-by-department) are cheap `GROUP BY` queries against a small table, so there's no cost to composing them server-side. `user` never calls `/stats` at all — their dashboard (profile summary + recent news) is served entirely by endpoints that already existed (`GET /employees/me`, `GET /news`), so there's no aggregation logic to write for a role that doesn't need any.
+- `GET /stats` bulk-resolves any due `sent → expired` offer transition before aggregating (`UPDATE ... WHERE status='sent' AND expires_at < now()`), instead of relying on the existing lazy per-read resolution in `offers/service.py` — otherwise an expired offer nobody has individually opened since expiring would still count as `sent` in the funnel.
+- The offers funnel and employees-by-department dashboard charts use a single accent hue (an indigo light→dark ramp for the funnel's ordered stages, flat indigo for the unordered department bars) rather than reusing `StatusBadge`'s 5 status colors — that palette fails a colorblind-safety check (orange/red are indistinguishable under deuteranopia/protanopia at the required contrast). Chart identity comes from axis labels and direct value labels, not from color.
