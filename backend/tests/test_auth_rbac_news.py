@@ -57,3 +57,15 @@ def test_news_list_is_public_and_supports_pagination(client):
 	resp = client.get("/news?offset=0&limit=10")
 	assert resp.status_code == 200, resp.text
 	assert isinstance(resp.json(), list)
+
+
+# GET /news отдаёт последние новости первыми (нужно для виджета "последние новости" на дашборде)
+def test_news_list_orders_newest_first(client, admin_tokens: dict):
+	access = admin_tokens["access_token"]
+	first = client.post("/news", json={"title": "older", "body": "x"}, headers={"Authorization": f"Bearer {access}"})
+	second = client.post("/news", json={"title": "newer", "body": "x"}, headers={"Authorization": f"Bearer {access}"})
+	assert first.status_code == 201 and second.status_code == 201
+
+	resp = client.get("/news?offset=0&limit=1")
+	assert resp.status_code == 200, resp.text
+	assert resp.json()[0]["id"] == second.json()["id"]

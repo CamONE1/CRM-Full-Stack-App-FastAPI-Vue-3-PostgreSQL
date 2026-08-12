@@ -10,4 +10,10 @@ def create_news(db: Session, news: schemas.NewsCreate, author_id: int):
 	return db_news
 
 def get_news(db: Session, offset: int = 0, limit: int = 10):
-	return db.query(models.News).offset(offset).limit(limit).all()
+	return (
+		db.query(models.News)
+		.order_by(models.News.created_at.desc(), models.News.id.desc())
+		.offset(offset)
+		.limit(limit)
+		.all()
+	)
